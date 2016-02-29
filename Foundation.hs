@@ -90,6 +90,10 @@ instance Yesod App where
     -- Default to Authorized for now.
     isAuthorized _ _ = return Authorized
 
+    -- Set Max upload size fo photos to
+    maximumContentLength _ (Just PhotoR) = Just $ 50 * 1024 * 1024 * 1024
+    maximumContentLength _ _ = Just $ 2 * 1024 * 1024
+
     -- This function creates static content files in the static folder
     -- and names them based on a hash of their content. This allows
     -- expiration dates to be set far in the future without worry of
