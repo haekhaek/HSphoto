@@ -1,0 +1,13 @@
+<h1>Upload your files ;-)
+
+<form enctype="multipart/form-data" id="upload">
+    <progress value="40" max="100" id="progressBar">
+    <div class="form-group required ">
+        <label>Select Files
+        <input type="file" name="filesToUpload" id="filesToUpload" multiple="true" accept="image/jpeg,video/mp4" required >
+    <div class="form-group required ">
+        <label>Tag
+        <input type="text" name="tag" id="tag" class="form-control" required >
+
+    <button class="btn btn-default" type="submit">
+        <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"> Upload
