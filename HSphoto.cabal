@@ -23,6 +23,7 @@ library
                      Handler.Common
                      Handler.Home
                      Handler.Comment
+                     Handler.Photo
                      Handler.File
 
     if flag(dev) || flag(library-only)
@@ -85,6 +86,9 @@ library
                  , time
                  , case-insensitive
                  , wai
+                 , random
+                 , uuid
+                 , filepath
 
 executable         HSphoto
     if flag(library-only)

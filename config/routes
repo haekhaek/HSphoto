@@ -7,4 +7,5 @@
 / HomeR GET POST
 
 /comments CommentR POST
+/photos/new PhotoR POST
 /files/new FileR GET
