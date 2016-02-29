@@ -1,4 +1,4 @@
-<h1>Upload your files ;-)
+<h1.jumbotron>Upload your files ;-)
 
 <form enctype="multipart/form-data" id="upload">
     <progress value="40" max="100" id="progressBar">
