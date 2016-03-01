@@ -21,6 +21,8 @@ $newline never
     \<![endif]-->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.3/js.cookie.min.js">
+    <script src="//cdn.jsdelivr.net/bluebird/3.3.3/bluebird.min.js"></script>
+    <script src="//cdn.jsdelivr.net/lodash/4.5.1/lodash.min.js"></script>
 
     <script>
       /* The `defaultCsrfMiddleware` Middleware added in Foundation.hs adds a CSRF token the request cookies. */

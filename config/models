@@ -13,5 +13,12 @@ Comment json -- Adding "json" causes ToJSON and FromJSON instances to be derived
     userId UserId Maybe
     deriving Eq
     deriving Show
-
- -- By default this file is used in Model.hs (which is imported by Foundation.hs)
+Photo
+    file String
+    tag Text
+    time UTCTime default=CURRENT_TIME
+    contentType Text
+    folderPath Text default='/tmp'
+    deriving Eq
+    deriving Show
+-- By default this file is used in Model.hs (which is imported by Foundation.hs)

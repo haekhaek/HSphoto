@@ -1,0 +1,62 @@
+$(document).ready(function (e) {
+    $("#upload").on('submit', function(e) {
+        e.preventDefault();
+
+        var formTag = $("#tag").val(),
+            formFiles = $('#filesToUpload')[0].files,
+            formFilesFlat = _.filter(formFiles, filterFilesToUpload);
+
+        Promise
+            .each(formFilesFlat, uploadFile.bind(null, formTag))
+            .catch(handleError);
+    });
+
+    function filterFilesToUpload(fileToUpload) {
+        return fileToUpload.type == 'video/mp4' || fileToUpload.type == 'image/jpeg';
+    }
+
+    function uploadFile(formTag, fileToUpload) {
+        var url = getUploadUrl(fileToUpload),
+            formData = new FormData();
+
+        formData.append("_token", csrfToken);
+        formData.append("f1", fileToUpload);
+        formData.append("f2", formTag);
+
+        return new Promise(function(resolve, reject){
+            return $.ajax({
+                url: url,
+                type: "POST",
+                enctype: "multipart/form-data",
+                data:  formData,
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: resolve,
+                error: reject
+            });
+        })
+        .then(increaseProgressBar);
+    }
+
+    function increaseProgressBar(result){
+        //increase progress bar
+    }
+
+    function getUploadUrl(fileToUpload){
+        var url = "/photos/new";
+
+        /*
+        if(fileToUpload.type == 'video/mp4'){
+            url = "/videos/new";
+        }
+        */
+
+        return url;
+    }
+
+    function handleError(error){
+        //error happened, show to user big warning
+        console.log('#error2', error);
+    }
+});
