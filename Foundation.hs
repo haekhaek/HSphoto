@@ -11,6 +11,7 @@ import Yesod.Core.Types     (Logger)
 import qualified Yesod.Core.Unsafe as Unsafe
 import qualified Data.CaseInsensitive as CI
 import qualified Data.Text.Encoding as TE
+import Yesod.Form.Jquery
 
 -- | The foundation datatype for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -121,6 +122,12 @@ instance Yesod App where
             || level == LevelError
 
     makeLogger = return . appLogger
+
+instance YesodJquery App where
+    urlJqueryJs _ = Right "//ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"
+    urlJqueryUiJs _ = Right "//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"
+    urlJqueryUiCss _ = Right "//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css"
+
 
 -- How to run database actions.
 instance YesodPersist App where
