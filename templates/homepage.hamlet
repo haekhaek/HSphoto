@@ -1,13 +1,31 @@
-<h1.jumbotron>
+<h1>
     Welcome to HSphoto!
 
 <.page-header>
     <h2>Starting
+<div class="container">
+<form method="post" action=@{HomeR} enctype=#{enctype} id="filterForm">
+    ^{widget}
+    <button class="btn btn-default" type="submit"> Filter
 
 <div class="container">
     <ul id="allFiles">
         $forall Entity id file <- allFiles
             <li>
-                <img height="400" src="#{photoFolderPath file}/#{photoFile file}">
-                <!--<video width="200" autoplay src="#{photoFolderPath file}/#{photoFile file}">-->
+            <img class="lazy" height="400" src="//hackage.haskell.org/package/hsexif-0.6.0.7/docs/hslogo-16.png" data-original="#{photoAbsolutePath file}">
+                <!--<video width="200" autoplay controls="true" src="#{photoFolderPath file}/#{photoFileName file}">-->
                 <p>&#35;#{photoTag file}
+
+                <button type="button" class="btn btn-default btn-md">
+                    <span class="glyphicon glyphicon-heart-empty"> 0
+
+                $maybe foo <- photoCameraManufacturer file
+                    $maybe bar <- photoCameraModel file
+                        <button type="button" class="btn btn-default btn-md">
+                            <span class="glyphicon glyphicon-camera"> #{foo} #{bar}
+                $maybe flash <- photoFlashFired file
+                    <button type="button" class="btn btn-default btn-md">
+                        <span class="glyphicon glyphicon-flash" aria-hidden="false">Flash fired: #{flash}
+                $maybe foo <- photoTimeShot file
+                    <button type="button" class="btn btn-default btn-md">
+                        <span class="glyphicon glyphicon-calender" aria-hidden="false">#{show foo}

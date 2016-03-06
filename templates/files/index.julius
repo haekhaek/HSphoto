@@ -12,7 +12,9 @@ $(document).ready(function (e) {
     });
 
     function filterFilesToUpload(fileToUpload) {
-        return fileToUpload.type == 'video/mp4' || fileToUpload.type == 'image/jpeg';
+        return fileToUpload.type == 'video/mp4'
+            || fileToUpload.type == 'video/quicktime'
+            || fileToUpload.type == 'image/jpeg';
     }
 
     function uploadFile(formTag, fileToUpload) {
