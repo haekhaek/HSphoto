@@ -12,6 +12,6 @@
     <ul id="allFiles">
         $forall Entity id file <- allFiles
             <li>
-                <img height="400" src="#{photoFolderPath file}/#{photoFile file}">
-                <!--<video width="200" autoplay src="#{photoFolderPath file}/#{photoFile file}">-->
+            <img class="lazy" height="400" src="//hackage.haskell.org/package/hsexif-0.6.0.7/docs/hslogo-16.png" data-original="#{photoAbsolutePath file}">
+                <!--<video width="200" autoplay controls="true" src="#{photoFolderPath file}/#{photoFileName file}">-->
                 <p>&#35;#{photoTag file}
