@@ -19,12 +19,18 @@ $newline never
     \<!--[if lt IE 9]>
     \<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     \<![endif]-->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js">
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.3/js.cookie.min.js">
-    <script src="//cdn.jsdelivr.net/bluebird/3.3.3/bluebird.min.js"></script>
-    <script src="//cdn.jsdelivr.net/lodash/4.5.1/lodash.min.js"></script>
+  <body>
+    <div class="container">
+      <header>
+      <div id="main" role="main">
+        ^{pageBody pc}
+      <footer>
+        #{appCopyright $ appSettings master}
 
-    <script>
+
+   <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js">-->
+   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.3/js.cookie.min.js">
+   <script>
       /* The `defaultCsrfMiddleware` Middleware added in Foundation.hs adds a CSRF token the request cookies. */
       /* AJAX requests should add that token to a header to be validated by the server. */
       /* See the CSRF documentation in the Yesod.Core.Handler module of the yesod-core package for details. */
@@ -42,15 +48,15 @@ $newline never
       \  });
       }
 
-    <script>
+   <script>
       document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/,'js');
-  <body>
-    <div class="container">
-      <header>
-      <div id="main" role="main">
-        ^{pageBody pc}
-      <footer>
-        #{appCopyright $ appSettings master}
+   <script src="//cdn.jsdelivr.net/bluebird/3.3.3/bluebird.min.js"></script>
+   <script src="//cdn.jsdelivr.net/lodash/4.5.1/lodash.min.js"></script>
+   <script src="//www.appelsiini.net/projects/lazyload/jquery.lazyload.js?v=1.9.1">
+   <script>
+    \$(function() {
+        \$("img.lazy").lazyload();
+    \});</script>
 
     $maybe analytics <- appAnalytics $ appSettings master
       <script>
