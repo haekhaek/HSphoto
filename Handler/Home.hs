@@ -1,7 +1,6 @@
 module Handler.Home where
 
 import Import
-import Text.Julius (RawJS (..))
 import Yesod.Form.Bootstrap3
 
 getHomeR :: Handler Html
