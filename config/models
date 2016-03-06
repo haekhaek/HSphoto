@@ -14,11 +14,18 @@ Comment json -- Adding "json" causes ToJSON and FromJSON instances to be derived
     deriving Eq
     deriving Show
 Photo
-    file String
+    fileName String
     tag Text
     time UTCTime default=CURRENT_TIME
     contentType Text
     folderPath Text default='/tmp'
+    absolutePath Text default='tmp'
+    gpsLat Text Maybe
+    gpsLong Text Maybe
+    cameraModel Text Maybe
+    cameraManufacturer Text Maybe
+    flashFired Bool Maybe
+    timeShot UTCTime Maybe
     deriving Eq
     deriving Show
 -- By default this file is used in Model.hs (which is imported by Foundation.hs)
