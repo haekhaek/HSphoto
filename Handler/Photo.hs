@@ -5,6 +5,8 @@ import System.Directory
 import Yesod.Form.Bootstrap3
 import Data.UUID
 import System.Random
+import Graphics.HsExif as HsExif
+import Data.Time.LocalTime
 
 fileForm :: Form (FileInfo, Text, UTCTime, Text)
 fileForm = renderBootstrap3 BootstrapBasicForm $ (,,,)
@@ -20,7 +22,23 @@ postPhotoR = do
         FormSuccess (file, tag, time, _) -> do
             folderPath <- createFolder time
             fileName <- moveToUploadFolder file folderPath
-            _ <- runDB $ insert $ Photo fileName tag time (fileContentType file) $ pack folderPath
+            let absolutePath = folderPath </> fileName
+                uploadedPhoto = Photo {
+                photoFileName=fileName,
+                photoTag=tag,
+                photoTime=time,
+                photoContentType=(fileContentType file),
+                photoFolderPath=pack folderPath,
+                photoAbsolutePath=pack absolutePath,
+                photoGpsLat=Just ("0"::Text),
+                photoGpsLong=Just ("0"::Text),
+                photoCameraModel=Just ("None"::Text),
+                photoCameraManufacturer=Just ("None"::Text),
+                photoFlashFired= Just (False),
+                photoTimeShot=Just $ time
+            }
+            uploadedPhoto' <- getExifMap absolutePath uploadedPhoto
+            _ <- runDB $ insert uploadedPhoto'
             sendResponseStatus status204 ("No Content"::Text)
         _ -> sendResponseStatus status400 ("Bad Request"::Text)
 
@@ -61,3 +79,27 @@ createUniqueFileName :: FileInfo -> Handler Text
 createUniqueFileName file = do
     uniqueFileName <- liftIO randomIO
     return $ (toText uniqueFileName) ++ (fileName file)
+
+getExifMap :: FilePath -> Photo -> Handler Photo
+getExifMap absoluteFilePath uploadedPhoto = do
+    eMap <- liftIO $ HsExif.parseFileExif absoluteFilePath
+    timeZone <- liftIO $ getCurrentTimeZone
+    case eMap of
+         -- what if left means this is not a jpeg image?
+         Left _ -> return uploadedPhoto
+         Right val -> return $ updateExifData uploadedPhoto val timeZone
+
+updateExifData :: Photo -> (Map ExifTag ExifValue) -> TimeZone -> Photo
+updateExifData uploadedPhoto exifMap timeZone = uploadedPhoto {
+        photoCameraModel=lookupTag HsExif.model exifMap,
+        photoCameraManufacturer=lookupTag HsExif.make exifMap,
+        photoFlashFired=HsExif.wasFlashFired exifMap,
+        photoTimeShot=(localTimeToUTC timeZone <$> HsExif.getDateTimeOriginal exifMap)
+    }
+
+lookupTag :: ExifTag -> (Map ExifTag ExifValue) -> Maybe Text
+lookupTag tag exifMap = packTagValue $ lookup tag exifMap
+
+packTagValue :: Maybe (MapValue (Map ExifTag ExifValue)) -> Maybe Text
+packTagValue (Just qux) = Just (pack $ show $ qux)
+packTagValue Nothing = Nothing
