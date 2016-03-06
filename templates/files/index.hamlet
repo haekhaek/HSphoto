@@ -4,7 +4,7 @@
     <progress value="40" max="100" id="progressBar">
     <div class="form-group required ">
         <label>Select Files
-        <input type="file" name="filesToUpload" id="filesToUpload" multiple="true" accept="image/jpeg,video/mp4" required >
+        <input type="file" name="filesToUpload" id="filesToUpload" multiple="true" accept="image/jpeg,video/mp4,video/qt,ideo/mov" required >
     <div class="form-group required ">
         <label>Tag
         <input type="text" name="tag" id="tag" class="form-control" required >
