@@ -89,6 +89,7 @@ library
                  , random
                  , uuid
                  , filepath
+                 , hsexif
 
 executable         HSphoto
     if flag(library-only)

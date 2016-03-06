@@ -3,6 +3,10 @@
 
 <.page-header>
     <h2>Starting
+<div class="container">
+<form method="post" action=@{HomeR} enctype=#{enctype} id="filterForm">
+    ^{widget}
+    <button class="btn btn-default" type="submit"> Filter
 
 <div class="container">
     <ul id="allFiles">
