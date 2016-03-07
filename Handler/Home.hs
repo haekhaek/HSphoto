@@ -48,10 +48,6 @@ postHomeR = do
     ((result, widget), enctype) <- runFormPost $ renderBootstrap3 BootstrapBasicForm (filterForm Nothing)
     case result of
          FormSuccess filterOptions' -> do
-                let fromTime = dayToUtcTime $ fromTimeShot filterOptions'
-                    toTime = dayToUtcTime $ toTimeShot filterOptions'
-                    myFilter = map foo . filter bar $ createSqlFilters filterOptions'
-
                 allFiles <- runDB $ selectList myFilter [Desc PhotoTimeShot]
                 defaultLayout $(widgetFile "homepage")
          _ -> sendResponseStatus status404 ("Not Found"::Text)
