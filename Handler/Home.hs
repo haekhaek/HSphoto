@@ -60,14 +60,6 @@ dayToUtcTime :: Maybe Day -> Maybe UTCTime
 dayToUtcTime (Just myDay) = Just $ UTCTime myDay $ Clock.secondsToDiffTime 0
 dayToUtcTime Nothing = Nothing
 
--- foo :: FilterOptions -> [Filter Photo]
--- foo filterOptions =
---     (       [PhotoTag ==. filterOptionsTag filterOptions]
---         ||. [PhotoCameraManufacturer ==. cameraManufacturer filterOptions]
---         ||. [PhotoCameraModel ==. cameraModel filterOptions]
---         ||. [PhotoFlashFired ==. flashFired filterOptions]
---     )
-
 foo :: (Bool, a) -> a
 foo (_, a) = a
 
@@ -112,4 +104,3 @@ createSqlFilters filterOptions =
         , filterFilter=Lt
         }
     )]
-
