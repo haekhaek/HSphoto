@@ -9,7 +9,7 @@ import Data.Time.Clock as Clock
 getHomeR :: Handler Html
 getHomeR = do
     (widget, enctype) <- generateFormPost $ renderBootstrap3 BootstrapBasicForm (filterForm Nothing)
-    allFiles <- runDB $ selectList [] [Desc PhotoTime]
+    let allFiles = []
     defaultLayout $ do
         setTitle "Welcome To Yesod!"
         $(widgetFile "homepage")
