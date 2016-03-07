@@ -51,7 +51,9 @@ postHomeR = do
                 let myFilter = map tupleToFilter . filter isFalseFilter $ createSqlFilters filterOptions'
                 allFiles <- runDB $ selectList myFilter [Asc PhotoTimeShot]
                 defaultLayout $(widgetFile "homepage")
-         _ -> sendResponseStatus status404 ("Not Found"::Text)
+         _ -> defaultLayout $ do
+             let allFiles = []
+             $(widgetFile "homepage")
 
 dayToUtcTime :: DiffTime -> Maybe Day -> Maybe UTCTime
 dayToUtcTime diff (Just myDay) = Just $ UTCTime myDay $ diff
