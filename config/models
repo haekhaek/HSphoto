@@ -15,7 +15,7 @@ Comment json -- Adding "json" causes ToJSON and FromJSON instances to be derived
     deriving Show
 Photo
     fileName String
-    tag Text
+    tag Text Maybe
     time UTCTime default=CURRENT_TIME
     contentType Text
     folderPath Text default='/tmp'
