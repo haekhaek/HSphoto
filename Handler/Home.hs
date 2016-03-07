@@ -33,7 +33,7 @@ filterForm myFilterOptions = FilterOptions
     <$> areq textField (bfs ("Tag":: Text)) (getTag myFilterOptions)
     <*> aopt textField (bfs ("Make"::Text)) Nothing
     <*> aopt textField (bfs ("Camramodel"::Text)) Nothing
-    <*> aopt checkBoxField "Flash fired" Nothing
+    <*> aopt boolField "Flash fired" Nothing
     <*> aopt (jqueryDatePickerDayField def
         { jdsChangeYear=True
         , jdsYearRange="1950:−20"
