@@ -15,7 +15,7 @@ getHomeR = do
         $(widgetFile "homepage")
 
 data FilterOptions = FilterOptions
-    { filterOptionsTag :: Text
+    { filterOptionsTag :: Maybe Text
     , cameraManufacturer :: Maybe Text
     , cameraModel :: Maybe Text
     , flashFired :: Maybe Bool
@@ -24,24 +24,24 @@ data FilterOptions = FilterOptions
     }
   deriving Show
 
-getTag :: Maybe FilterOptions -> Maybe Text
-getTag (Just (FilterOptions filterOptionsTag _ _ _ _ _)) = Just filterOptionsTag
-getTag Nothing = Nothing
-
 filterForm :: Maybe FilterOptions -> AForm Handler FilterOptions
 filterForm myFilterOptions = FilterOptions
-    <$> areq textField (bfs ("Tag":: Text)) (getTag myFilterOptions)
-    <*> aopt textField (bfs ("Make"::Text)) Nothing
-    <*> aopt textField (bfs ("Camramodel"::Text)) Nothing
-    <*> aopt boolField "Flash fired" Nothing
-    <*> aopt (jqueryDatePickerDayField def
-        { jdsChangeYear=True
-        , jdsYearRange="1950:−20"
-        }) "From date photo created" Nothing
-    <*> aopt (jqueryDatePickerDayField def
-        { jdsChangeYear=True
-        , jdsYearRange="1950:−20"
-        }) "To date photo created" Nothing
+    <$> aopt (jqueryAutocompleteField HomeR) tagSettings Nothing
+    <*> aopt textField (bfs ("camera make"::Text)) Nothing
+    <*> aopt textField (bfs ("camera model"::Text)) Nothing
+    <*> aopt boolField flashFiredSettings Nothing
+    <*> aopt datePickerField fromDateSettings Nothing
+    <*> aopt datePickerField toDateSettings Nothing
+    <*  bootstrapSubmit ("search" :: BootstrapSubmit Text)
+    where fromDateSettings = (bfs ("from date photo created"::Text))
+          toDateSettings = withSmallInput $ (bfs ("to date photo created"::Text))
+          tagSettings = withPlaceholder "type in the tag you search for" $ tagSettings'
+          tagSettings' = FieldSettings (SomeMessage ("tag"::Text)) Nothing (Just "tagId") Nothing []
+          flashFiredSettings = (FieldSettings (SomeMessage ("flash fired"::Text)) Nothing (Just "flashFired") Nothing [])
+          datePickerField = (jqueryDatePickerDayField def
+            { jdsChangeYear=True
+            , jdsYearRange="1950:−20"
+            })
 
 postHomeR :: Handler Html
 postHomeR = do
@@ -53,9 +53,15 @@ postHomeR = do
                 defaultLayout $(widgetFile "homepage")
          _ -> sendResponseStatus status404 ("Not Found"::Text)
 
-dayToUtcTime :: Maybe Day -> Maybe UTCTime
-dayToUtcTime (Just myDay) = Just $ UTCTime myDay $ Clock.secondsToDiffTime 0
-dayToUtcTime Nothing = Nothing
+dayToUtcTime :: DiffTime -> Maybe Day -> Maybe UTCTime
+dayToUtcTime diff (Just myDay) = Just $ UTCTime myDay $ diff
+dayToUtcTime _ Nothing = Nothing
+
+diffTimeStartOfDay :: DiffTime
+diffTimeStartOfDay = Clock.secondsToDiffTime 0
+
+diffTimeEndOfDay :: DiffTime
+diffTimeEndOfDay = Clock.secondsToDiffTime 86400
 
 tupleToFilter :: (Bool, a) -> a
 tupleToFilter (_, a) = a
@@ -70,7 +76,7 @@ checkIsBool Nothing = False
 
 createSqlFilters :: FilterOptions -> [(Bool, Filter Photo)]
 createSqlFilters filterOptions =
-    [(True, Filter
+    [(isJust $ filterOptionsTag filterOptions, Filter
         { filterField=PhotoTag
         , filterValue=Right [filterOptionsTag filterOptions]
         , filterFilter=Eq
@@ -92,12 +98,12 @@ createSqlFilters filterOptions =
         }
     ),(isJust $ fromTimeShot filterOptions, Filter
         { filterField=PhotoTimeShot
-        , filterValue=Right [dayToUtcTime $ fromTimeShot filterOptions]
+        , filterValue=Right [dayToUtcTime diffTimeStartOfDay $ fromTimeShot filterOptions]
         , filterFilter=Gt
         }
     ),(isJust $ toTimeShot filterOptions, Filter
         { filterField=PhotoTimeShot
-        , filterValue=Right [dayToUtcTime $ toTimeShot filterOptions]
+        , filterValue=Right [dayToUtcTime diffTimeEndOfDay $ toTimeShot filterOptions]
         , filterFilter=Lt
         }
     )]

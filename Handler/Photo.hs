@@ -8,10 +8,10 @@ import System.Random
 import Graphics.HsExif as HsExif
 import Data.Time.LocalTime
 
-fileForm :: Form (FileInfo, Text, UTCTime, Text)
+fileForm :: Form (FileInfo, Maybe Text, UTCTime, Text)
 fileForm = renderBootstrap3 BootstrapBasicForm $ (,,,)
     <$> fileAFormReq "Add file"
-    <*> areq textField (bfs ("Tag" :: Text)) Nothing
+    <*> aopt textField (bfs ("Tag" :: Text)) Nothing
     <*> lift (liftIO getCurrentTime)
     <*> pure "/tmp"
 

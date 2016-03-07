@@ -6,7 +6,6 @@
 <div class="container">
 <form method="post" action=@{HomeR} enctype=#{enctype} id="filterForm">
     ^{widget}
-    <button class="btn btn-default" type="submit"> Filter
 
 <div class="container">
     <ul id="allFiles">
@@ -14,7 +13,8 @@
             <li>
             <img class="lazy" height="400" src="//hackage.haskell.org/package/hsexif-0.6.0.7/docs/hslogo-16.png" data-original="#{photoAbsolutePath file}">
                 <!--<video width="200" autoplay controls="true" src="#{photoFolderPath file}/#{photoFileName file}">-->
-                <p>&#35;#{photoTag file}
+                $maybe foo <- photoTag file
+                    <p>&#35;#{foo}
 
                 <button type="button" class="btn btn-default btn-md">
                     <span class="glyphicon glyphicon-heart-empty"> 0
