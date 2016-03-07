@@ -48,6 +48,7 @@ postHomeR = do
     ((result, widget), enctype) <- runFormPost $ renderBootstrap3 BootstrapBasicForm (filterForm Nothing)
     case result of
          FormSuccess filterOptions' -> do
+                let myFilter = map tupleToFilter . filter isFalseFilter $ createSqlFilters filterOptions'
                 allFiles <- runDB $ selectList myFilter [Desc PhotoTimeShot]
                 defaultLayout $(widgetFile "homepage")
          _ -> sendResponseStatus status404 ("Not Found"::Text)
@@ -56,12 +57,12 @@ dayToUtcTime :: Maybe Day -> Maybe UTCTime
 dayToUtcTime (Just myDay) = Just $ UTCTime myDay $ Clock.secondsToDiffTime 0
 dayToUtcTime Nothing = Nothing
 
-foo :: (Bool, a) -> a
-foo (_, a) = a
+tupleToFilter :: (Bool, a) -> a
+tupleToFilter (_, a) = a
 
-bar :: (Bool, a) -> Bool
-bar (True, a) = True
-bar (False, a) = False
+isFalseFilter :: (Bool, a) -> Bool
+isFalseFilter (True, a) = True
+isFalseFilter (False, a) = False
 
 checkIsBool :: Maybe a -> Bool
 checkIsBool (Just a) = True
