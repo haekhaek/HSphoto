@@ -49,7 +49,7 @@ postHomeR = do
     case result of
          FormSuccess filterOptions' -> do
                 let myFilter = map tupleToFilter . filter isFalseFilter $ createSqlFilters filterOptions'
-                allFiles <- runDB $ selectList myFilter [Desc PhotoTimeShot]
+                allFiles <- runDB $ selectList myFilter [Asc PhotoTimeShot]
                 defaultLayout $(widgetFile "homepage")
          _ -> sendResponseStatus status404 ("Not Found"::Text)
 
