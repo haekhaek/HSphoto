@@ -1,4 +1,4 @@
-li{
+ul#allFiles li{
     list-style: none;
     float: left;
     width: auto;
@@ -6,7 +6,7 @@ li{
     margin: 10px 10px 10px 0px;
 }
 
-li img {
+ul#allFiles li img {
     image-orientation: from-image;
 }
 
