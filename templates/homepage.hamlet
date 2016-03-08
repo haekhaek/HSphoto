@@ -3,9 +3,9 @@
 
 <.page-header>
     <h2>Starting
-<div class="container">
-<form method="post" action=@{HomeR} enctype=#{enctype} id="filterForm">
-    ^{widget}
+<div class="container col-xs-12 col-md-8">
+    <form method="post" action=@{HomeR} enctype=#{enctype} id="filterForm">
+        ^{widget}
 
 <div class="container">
     <ul id="allFiles">
