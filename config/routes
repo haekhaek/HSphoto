@@ -8,4 +8,5 @@
 
 /comments CommentR POST
 /photos/new PhotoR POST
+/videos/new VideoR POST
 /files/new FileR GET

@@ -8,6 +8,17 @@ import System.Random
 import Graphics.HsExif as HsExif
 import Data.Time.LocalTime
 
+postPhotoR :: Handler Html
+postPhotoR = do
+    ((result, _), _) <- runFormPost $ fileForm
+    case result of
+        FormSuccess myForm -> do
+            uploadedPhotoWithDefaults <- formToFile myForm
+            uploadedPhoto <- updateExifMap uploadedPhotoWithDefaults
+            _ <- runDB $ insert uploadedPhoto
+            sendResponseStatus status204 ("No Content"::Text)
+        _ -> sendResponseStatus status400 ("Bad Request"::Text)
+
 fileForm :: Form (FileInfo, Maybe Text, UTCTime, Text)
 fileForm = renderBootstrap3 BootstrapBasicForm $ (,,,)
     <$> fileAFormReq "Add file"
@@ -15,32 +26,24 @@ fileForm = renderBootstrap3 BootstrapBasicForm $ (,,,)
     <*> lift (liftIO getCurrentTime)
     <*> pure "/tmp"
 
-postPhotoR :: Handler Html
-postPhotoR = do
-    ((result, _), _) <- runFormPost $ fileForm
-    case result of
-        FormSuccess (file, tag, time, _) -> do
-            folderPath <- createFolder time
-            fileName <- moveToUploadFolder file folderPath
-            let absolutePath = folderPath </> fileName
-                uploadedPhoto = Photo {
-                photoFileName=fileName,
-                photoTag=tag,
-                photoTime=time,
-                photoContentType=(fileContentType file),
-                photoFolderPath=pack folderPath,
-                photoAbsolutePath=pack absolutePath,
-                photoGpsLat=Just ("0"::Text),
-                photoGpsLong=Just ("0"::Text),
-                photoCameraModel=Just ("None"::Text),
-                photoCameraManufacturer=Just ("None"::Text),
-                photoFlashFired= Just (False),
-                photoTimeShot=Just $ time
-            }
-            uploadedPhoto' <- getExifMap absolutePath uploadedPhoto
-            _ <- runDB $ insert uploadedPhoto'
-            sendResponseStatus status204 ("No Content"::Text)
-        _ -> sendResponseStatus status400 ("Bad Request"::Text)
+formToFile :: (FileInfo, Maybe Text, UTCTime, Text) -> Handler MediaFile
+formToFile (file, tag, time, _) = do
+    folderPath <- createFolder time
+    fileName <- moveToUploadFolder file folderPath
+    return MediaFile {
+        mediaFileFileName=fileName,
+        mediaFileTag=tag,
+        mediaFileTime=time,
+        mediaFileContentType=fileContentType file,
+        mediaFileFolderPath=pack folderPath,
+        mediaFileAbsolutePath=pack $ folderPath </> fileName,
+        mediaFileGpsLat=Just ("0"::Text),
+        mediaFileGpsLong=Just ("0"::Text),
+        mediaFileCameraModel=Just ("None"::Text),
+        mediaFileCameraManufacturer=Just ("None"::Text),
+        mediaFileFlashFired= Just (False),
+        mediaFileTimeShot=Just $ time
+    }
 
 createFolder :: UTCTime -> Handler FilePath
 createFolder time = do
@@ -80,21 +83,21 @@ createUniqueFileName file = do
     uniqueFileName <- liftIO randomIO
     return $ (toText uniqueFileName) ++ (fileName file)
 
-getExifMap :: FilePath -> Photo -> Handler Photo
-getExifMap absoluteFilePath uploadedPhoto = do
-    eMap <- liftIO $ HsExif.parseFileExif absoluteFilePath
+updateExifMap :: MediaFile -> Handler MediaFile
+updateExifMap uploadedPhoto = do
+    eMap <- liftIO $ HsExif.parseFileExif $ unpack $ mediaFileAbsolutePath uploadedPhoto
     timeZone <- liftIO $ getCurrentTimeZone
     case eMap of
          -- what if left means this is not a jpeg image?
          Left _ -> return uploadedPhoto
          Right val -> return $ updateExifData uploadedPhoto val timeZone
 
-updateExifData :: Photo -> (Map ExifTag ExifValue) -> TimeZone -> Photo
+updateExifData :: MediaFile -> (Map ExifTag ExifValue) -> TimeZone -> MediaFile
 updateExifData uploadedPhoto exifMap timeZone = uploadedPhoto {
-        photoCameraModel=lookupTag HsExif.model exifMap,
-        photoCameraManufacturer=lookupTag HsExif.make exifMap,
-        photoFlashFired=HsExif.wasFlashFired exifMap,
-        photoTimeShot=(localTimeToUTC timeZone <$> HsExif.getDateTimeOriginal exifMap)
+        mediaFileCameraModel=lookupTag HsExif.model exifMap,
+        mediaFileCameraManufacturer=lookupTag HsExif.make exifMap,
+        mediaFileFlashFired=HsExif.wasFlashFired exifMap,
+        mediaFileTimeShot=(localTimeToUTC timeZone <$> HsExif.getDateTimeOriginal exifMap)
     }
 
 lookupTag :: ExifTag -> (Map ExifTag ExifValue) -> Maybe Text

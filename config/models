@@ -13,13 +13,13 @@ Comment json -- Adding "json" causes ToJSON and FromJSON instances to be derived
     userId UserId Maybe
     deriving Eq
     deriving Show
-Photo
+MediaFile
     fileName String
     tag Text Maybe
     time UTCTime default=CURRENT_TIME
     contentType Text
     folderPath Text default='/tmp'
-    absolutePath Text default='tmp'
+    absolutePath Text default='/tmp'
     gpsLat Text Maybe
     gpsLong Text Maybe
     cameraModel Text Maybe

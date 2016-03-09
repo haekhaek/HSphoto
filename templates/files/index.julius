@@ -48,11 +48,10 @@ $(document).ready(function (e) {
     function getUploadUrl(fileToUpload){
         var url = "/photos/new";
 
-        /*
-        if(fileToUpload.type == 'video/mp4'){
+        if(fileToUpload.type == 'video/mp4'
+        || fileToUpload.type == 'video/quicktime'){
             url = "/videos/new";
         }
-        */
 
         return url;
     }

@@ -76,36 +76,42 @@ checkIsBool :: Maybe a -> Bool
 checkIsBool (Just a) = True
 checkIsBool Nothing = False
 
-createSqlFilters :: FilterOptions -> [(Bool, Filter Photo)]
+createSqlFilters :: FilterOptions -> [(Bool, Filter MediaFile)]
 createSqlFilters filterOptions =
     [(isJust $ filterOptionsTag filterOptions, Filter
-        { filterField=PhotoTag
+        { filterField=MediaFileTag
         , filterValue=Right [filterOptionsTag filterOptions]
         , filterFilter=Eq
         }
      ),(isJust $ cameraManufacturer filterOptions, Filter
-        { filterField=PhotoCameraManufacturer
+        { filterField=MediaFileCameraManufacturer
         , filterValue=Right [cameraManufacturer filterOptions]
         , filterFilter=Eq
         }
      ),(isJust $ cameraModel filterOptions, Filter
-        { filterField=PhotoCameraModel
+        { filterField=MediaFileCameraModel
         , filterValue=Right [cameraModel filterOptions]
         , filterFilter=Eq
         }
     ),(isJust $ flashFired filterOptions, Filter
-        { filterField=PhotoFlashFired
+        { filterField=MediaFileFlashFired
         , filterValue=Right [flashFired filterOptions]
         , filterFilter=Eq
         }
     ),(isJust $ fromTimeShot filterOptions, Filter
-        { filterField=PhotoTimeShot
+        { filterField=MediaFileTimeShot
         , filterValue=Right [dayToUtcTime diffTimeStartOfDay $ fromTimeShot filterOptions]
         , filterFilter=Gt
         }
     ),(isJust $ toTimeShot filterOptions, Filter
-        { filterField=PhotoTimeShot
+        { filterField=MediaFileTimeShot
         , filterValue=Right [dayToUtcTime diffTimeEndOfDay $ toTimeShot filterOptions]
         , filterFilter=Lt
         }
     )]
+
+isImageFile :: Text -> Bool
+isImageFile "image/jpeg" = True
+isImageFile "image/gif" = True
+isImageFile "image/png" = True
+isImageFile _ = False
