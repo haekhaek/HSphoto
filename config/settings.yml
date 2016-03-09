@@ -27,5 +27,5 @@ database:
   database: "_env:SQLITE_DATABASE:HSphoto.sqlite3"
   poolsize: "_env:SQLITE_POOLSIZE:10"
 
-copyright: copyright @ eugen bopp
+copyright: ""
 #analytics: UA-YOURCODE
