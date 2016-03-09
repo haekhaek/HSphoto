@@ -1,31 +1,36 @@
 <h1>
     Welcome to HSphoto!
 
-<.page-header>
-    <h2>Starting
 <div class="container col-xs-12 col-md-8">
     <form method="post" action=@{HomeR} enctype=#{enctype} id="filterForm">
         ^{widget}
 
-<div class="container">
+<div class="container col-xs-12 col-md-12">
+    <h2>Images
     <ul id="allFiles">
         $forall Entity id file <- allFiles
-            <li>
-            <img class="lazy" height="400" src="//hackage.haskell.org/package/hsexif-0.6.0.7/docs/hslogo-16.png" data-original="#{photoAbsolutePath file}">
-                <!--<video width="200" autoplay controls="true" src="#{photoFolderPath file}/#{photoFileName file}">-->
-                $maybe foo <- photoTag file
-                    <p>&#35;#{foo}
+          <li>
+            $if isImageFile $ mediaFileContentType file
+              <img class="lazy" src="//hackage.haskell.org/package/hsexif-0.6.0.7/docs/hslogo-16.png" data-original="/#{mediaFileAbsolutePath file}">
+                $maybe tag <- mediaFileTag file
+                    <p>&#35;#{tag}
 
                 <button type="button" class="btn btn-default btn-md">
                     <span class="glyphicon glyphicon-heart-empty"> 0
 
-                $maybe foo <- photoCameraManufacturer file
-                    $maybe bar <- photoCameraModel file
+                $maybe foo <- mediaFileCameraManufacturer file
+                    $maybe bar <- mediaFileCameraModel file
                         <button type="button" class="btn btn-default btn-md">
                             <span class="glyphicon glyphicon-camera"> #{foo} #{bar}
-                $maybe flash <- photoFlashFired file
+                $maybe flash <- mediaFileFlashFired file
                     <button type="button" class="btn btn-default btn-md">
                         <span class="glyphicon glyphicon-flash" aria-hidden="false">Flash fired: #{flash}
-                $maybe foo <- photoTimeShot file
+                $maybe foo <- mediaFileTimeShot file
                     <button type="button" class="btn btn-default btn-md">
                         <span class="glyphicon glyphicon-calender" aria-hidden="false">#{show foo}
+
+            $else
+                <video width="400" muted controls preload="none">
+                    <source src="/#{mediaFileAbsolutePath file}" type=#{mediaFileContentType file}>
+                $maybe tag <- mediaFileTag file
+                    <p>&#35;#{tag}
