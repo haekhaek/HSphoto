@@ -1,6 +1,7 @@
 $(document).ready(function (e) {
     $("#upload").on('submit', function(e) {
         e.preventDefault();
+        $('#progressBar').val('0').text('0%');
 
         var formTag = $("#tag").val(),
             formFiles = $('#filesToUpload')[0].files,
@@ -9,7 +10,6 @@ $(document).ready(function (e) {
 
         Promise
             .map(formFilesFlat, uploadFile.bind(null, formTag, progressSteps), {concurrency: 1})
-            .then($('#progressBar').val(100).text(100))
             .catch(handleError);
     });
 
