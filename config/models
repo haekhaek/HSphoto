@@ -14,7 +14,7 @@ Comment json -- Adding "json" causes ToJSON and FromJSON instances to be derived
     deriving Eq
     deriving Show
 MediaFile
-    fileName String
+    name String
     tag Text Maybe
     time UTCTime default=CURRENT_TIME
     contentType Text
@@ -26,6 +26,7 @@ MediaFile
     cameraManufacturer Text Maybe
     flashFired Bool Maybe
     timeShot UTCTime Maybe
+    likes Int
     deriving Eq
     deriving Show
 -- By default this file is used in Model.hs (which is imported by Foundation.hs)

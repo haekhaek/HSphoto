@@ -91,6 +91,8 @@ library
                  , uuid
                  , filepath
                  , hsexif
+                 , thumbnail-plus
+                 , resourcet
 
 executable         HSphoto
     if flag(library-only)

@@ -7,17 +7,42 @@ import Data.UUID
 import System.Random
 import Graphics.HsExif as HsExif
 import Data.Time.LocalTime
+import Graphics.ThumbnailPlus as TP
+import qualified System.Directory as D
+import Control.Concurrent (forkIO, threadDelay)
+import qualified Control.Monad.Trans.Resource as R
 
 postPhotoR :: Handler Html
 postPhotoR = do
-    ((result, _), _) <- runFormPost $ fileForm
+    ((result, _), _) <- runFormPost fileForm
     case result of
         FormSuccess myForm -> do
             uploadedPhotoWithDefaults <- formToFile myForm
             uploadedPhoto <- updateExifMap uploadedPhotoWithDefaults
-            _ <- runDB $ insert uploadedPhoto
+            let mySize = 15 * 1024 * 1024
+                myResolution = Size 6144 6144
+                myThumbnailSizes = [(Size 600 600, Nothing), (Size 1360 1360, Nothing)]
+                config = TP.Configuration mySize myResolution SameFileFormat myThumbnailSizes D.getTemporaryDirectory
+                myPhoto = unpack $ mediaFileAbsolutePath uploadedPhoto
+                myPhotoPath = mediaFileFolderPath uploadedPhoto
+
+            liftIO $ forkIO $ R.runResourceT $ do
+                myThumbnails <- TP.createThumbnails config myPhoto
+                case myThumbnails of
+                    TP.CreatedThumbnails thumbnails _ -> liftIO $ copyThumbnails thumbnails myPhotoPath (mediaFileName uploadedPhoto)
+                    TP.ImageFormatUnrecognized -> print "ImageFormatUnrecognized"
+                    TP.ImageSizeTooLarge size -> print size
+                    TP.FileSizeTooLarge size -> print size
+
+            photoId <- runDB $ insert uploadedPhoto
             sendResponseStatus status204 ("No Content"::Text)
         _ -> sendResponseStatus status400 ("Bad Request"::Text)
+
+copyThumbnails :: [Thumbnail] -> Text -> String -> IO ()
+copyThumbnails (th1:th2:th3) path fileName = do
+    copyFile (TP.thumbFp th1) (unpack path </> "w1-" ++ fileName)
+    copyFile (TP.thumbFp th2) (unpack path </> "w2-" ++ fileName)
+    return ()
 
 fileForm :: Form (FileInfo, Maybe Text, UTCTime, Text)
 fileForm = renderBootstrap3 BootstrapBasicForm $ (,,,)
@@ -31,7 +56,7 @@ formToFile (file, tag, time, _) = do
     folderPath <- createFolder time
     fileName <- moveToUploadFolder file folderPath
     return MediaFile {
-        mediaFileFileName=fileName,
+        mediaFileName=fileName,
         mediaFileTag=tag,
         mediaFileTime=time,
         mediaFileContentType=fileContentType file,
@@ -41,8 +66,9 @@ formToFile (file, tag, time, _) = do
         mediaFileGpsLong=Just ("0"::Text),
         mediaFileCameraModel=Just ("None"::Text),
         mediaFileCameraManufacturer=Just ("None"::Text),
-        mediaFileFlashFired= Just (False),
-        mediaFileTimeShot=Just $ time
+        mediaFileFlashFired= Just False,
+        mediaFileTimeShot=Just time,
+        mediaFileLikes=0
     }
 
 createFolder :: UTCTime -> Handler FilePath
@@ -104,5 +130,5 @@ lookupTag :: ExifTag -> (Map ExifTag ExifValue) -> Maybe Text
 lookupTag tag exifMap = packTagValue $ lookup tag exifMap
 
 packTagValue :: Maybe (MapValue (Map ExifTag ExifValue)) -> Maybe Text
-packTagValue (Just qux) = Just (pack $ show $ qux)
+packTagValue (Just tagValue) = Just (pack $ show $ tagValue)
 packTagValue Nothing = Nothing
