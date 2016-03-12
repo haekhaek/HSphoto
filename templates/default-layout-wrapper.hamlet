@@ -14,6 +14,7 @@ $newline never
 
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/blueimp-gallery/2.18.2/css/blueimp-gallery.min.css" rel="stylesheet">
     ^{pageHead pc}
 
     \<!--[if lt IE 9]>
@@ -51,6 +52,8 @@ $newline never
    <script src="//cdn.jsdelivr.net/bluebird/3.3.3/bluebird.min.js"></script>
    <script src="//cdn.jsdelivr.net/lodash/4.5.1/lodash.min.js"></script>
    <script src="//www.appelsiini.net/projects/lazyload/jquery.lazyload.js?v=1.9.1">
+   <script src="//cdnjs.cloudflare.com/ajax/libs/blueimp-gallery/2.18.2/js/blueimp-gallery.js">
+   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
    <script>
     \$(function() {
         \$("img.lazy").lazyload();
