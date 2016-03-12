@@ -25,6 +25,7 @@ library
                      Handler.Comment
                      Handler.Photo
                      Handler.File
+                     Handler.Video
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT
@@ -90,6 +91,8 @@ library
                  , uuid
                  , filepath
                  , hsexif
+                 , thumbnail-plus
+                 , resourcet
 
 executable         HSphoto
     if flag(library-only)

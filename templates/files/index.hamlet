@@ -1,7 +1,14 @@
-<h1.jumbotron>Upload your files ;-)
+<div class="navbar navbar-inverse">
+    <div class="navbar-collapse">
+        <ul class="nav navbar-nav navbar-left" role="navigation">
+            <li>
+                <a href=@{HomeR}><span class="glyphicon glyphicon-home" aria-hidden="true"> HSphoto
+            <li class="active">
+              <a href=@{FileR}><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"> File upload
+
+<h1.jumbotron>Upload your files.
 
 <form enctype="multipart/form-data" id="upload">
-    <progress value="40" max="100" id="progressBar">
     <div class="form-group required ">
         <label>Select Files
         <input type="file" name="filesToUpload" id="filesToUpload" multiple="true" accept="image/jpeg,video/mp4,video/qt,ideo/mov" required >
@@ -11,3 +18,8 @@
 
     <button class="btn btn-default" type="submit">
         <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"> Upload
+
+<hr>
+<progress value="0" max="100" id="progressBar" class="container col-xs-12 col-md-12">
+<hr>
+<ul class="list-group" id="uploadResults">
