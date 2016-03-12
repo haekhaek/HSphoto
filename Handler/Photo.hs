@@ -116,7 +116,6 @@ updateExifMap uploadedPhoto = do
     eMap <- liftIO $ HsExif.parseFileExif $ unpack $ mediaFileAbsolutePath uploadedPhoto
     timeZone <- liftIO $ getCurrentTimeZone
     case eMap of
-         -- what if left means this is not a jpeg image?
          Left _ -> return uploadedPhoto
          Right val -> return $ updateExifData uploadedPhoto val timeZone
 
