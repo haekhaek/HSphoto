@@ -5,15 +5,15 @@ ul#allFiles{
 ul#allFiles li{
     list-style: none;
     float: left;
-    height: 300px;
-    width: auto;
-    max-height: 300px;
-    max-width: 360px;
-    margin: 10px 10px 10px 0px;
+    height: auto;
+    width: 265px;
+    max-width: 265px;
+    margin: 10px 10px 0 0;
 }
-
-ul#allFiles li img,video {
+.foo {
     image-orientation: from-image;
+}
+ul#allFiles li img,video {
     display: inline;
     height: auto;
     width: auto;
@@ -21,7 +21,9 @@ ul#allFiles li img,video {
     max-width: 100%;
     vertical-align: middle;
 }
-
+ul#allFiles li button {
+    margin-top: 5px;
+}
 form input[type="radio"], input[type="checkbox"] {
     margin-left: 20px;
     appearance:none;
@@ -59,4 +61,7 @@ form input[type="radio"]:checked, input[type="checkbox"] {
     -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
     -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+.blueimp-gallery-controls > .description {
+  display: block;
 }

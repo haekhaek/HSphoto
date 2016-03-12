@@ -1,36 +1,50 @@
-<h1>
-    Welcome to HSphoto!
+<div class="navbar navbar-inverse">
+    <div class="navbar-collapse">
+        <ul class="nav navbar-nav navbar-left" role="navigation">
+            <li class="active">
+                <a href=@{HomeR}><span class="glyphicon glyphicon-home" aria-hidden="true"> HSphoto
+            <li>
+              <a href=@{FileR}><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"> File upload
+
+<h1.jumbotron>Welcome to HSphoto!
 
 <div class="container col-xs-12 col-md-8">
     <form method="post" action=@{HomeR} enctype=#{enctype} id="filterForm">
         ^{widget}
 
-<div class="container col-xs-12 col-md-12">
-    <h2>Images
+<div id="links" class="container col-xs-12 col-md-12">
+    <hr>
     <ul id="allFiles">
         $forall Entity id file <- allFiles
           <li>
             $if isImageFile $ mediaFileContentType file
-              <img class="lazy" src="//hackage.haskell.org/package/hsexif-0.6.0.7/docs/hslogo-16.png" data-original="/#{mediaFileAbsolutePath file}">
+                <img class="lazy foo" src="//hackage.haskell.org/package/hsexif-0.6.0.7/docs/hslogo-16.png" data-original="/#{mediaFileFolderPath file}/w2-#{mediaFileName file}">
+                <button type="button" class="btn btn-default btn-xs" onclick="blueimp.Gallery(document.getElementById('links').getElementsByTagName('a'),{index:$(this).find('a')[0]});">
+                    <span class="glyphicon glyphicon-fullscreen" aria-hidden="true">
+                        <a href="/#{mediaFileFolderPath file}/w1-#{mediaFileName file}" data-gallery>
+                $maybe cameraManufacturer <- mediaFileCameraManufacturer file
+                    $maybe cameraModel <- mediaFileCameraModel file
+                        $maybe flashFired <- mediaFileFlashFired file
+                            $maybe timeShot <- mediaFileTimeShot file
+                                <button type="button" class="btn btn-default btn-xs" data-container="body" data-toggle="popover" data-placement="bottom" title="Info" data-content="#{cameraManufacturer}&#13;&#10;#{cameraModel}&#13;&#10;#{show timeShot}&#13;&#10;Flash fired: #{flashFired}">
+                                    <span class="glyphicon glyphicon-info-sign" aria-hidden="true">
+                <button type="button" class="btn btn-default btn-xs">
+                    <span class="glyphicon glyphicon-heart" aria-hidden="true"> #{mediaFileLikes file}
                 $maybe tag <- mediaFileTag file
-                    <p>&#35;#{tag}
-
-                <button type="button" class="btn btn-default btn-md">
-                    <span class="glyphicon glyphicon-heart-empty"> 0
-
-                $maybe foo <- mediaFileCameraManufacturer file
-                    $maybe bar <- mediaFileCameraModel file
-                        <button type="button" class="btn btn-default btn-md">
-                            <span class="glyphicon glyphicon-camera"> #{foo} #{bar}
-                $maybe flash <- mediaFileFlashFired file
-                    <button type="button" class="btn btn-default btn-md">
-                        <span class="glyphicon glyphicon-flash" aria-hidden="false">Flash fired: #{flash}
-                $maybe foo <- mediaFileTimeShot file
-                    <button type="button" class="btn btn-default btn-md">
-                        <span class="glyphicon glyphicon-calender" aria-hidden="false">#{show foo}
-
+                    <button type="button" class="btn btn-default btn-xs">
+                        <span class="glyphicon glyphicon-tags" aria-hidden="true"> #{tag}
             $else
-                <video width="400" muted controls preload="none">
+                <video muted controls preload="none">
                     <source src="/#{mediaFileAbsolutePath file}" type=#{mediaFileContentType file}>
                 $maybe tag <- mediaFileTag file
-                    <p>&#35;#{tag}
+                    <button type="button" class="btn btn-default btn-xs">
+                        <span class="glyphicon glyphicon-tags" aria-hidden="true"> #{tag}
+
+<div class="blueimp-gallery blueimp-gallery-controls" id="blueimp-gallery">
+    <div class="slides">
+    <h3 class="title">
+    <a class="prev">‹
+    <a class="next">›
+    <a class="close">×
+    <a class="play-pause">
+    <ol class="indicator">

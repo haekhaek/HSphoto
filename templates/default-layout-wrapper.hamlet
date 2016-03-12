@@ -56,9 +56,9 @@ $newline never
    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
    <script>
     \$(function() {
-        \$("img.lazy").lazyload();
-    \});</script>
-
+        \$(".lazy").lazyload();
+       \$('[data-toggle="popover"]').popover()
+    \});
     $maybe analytics <- appAnalytics $ appSettings master
       <script>
         if(!window.location.href.match(/localhost/)){
