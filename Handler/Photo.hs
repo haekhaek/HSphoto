@@ -26,7 +26,7 @@ postPhotoR = do
                 myPhoto = unpack $ mediaFileAbsolutePath uploadedPhoto
                 myPhotoPath = mediaFileFolderPath uploadedPhoto
 
-            liftIO $ forkIO $ R.runResourceT $ do
+            _ <- ($) liftIO $ forkIO $ R.runResourceT $ do
                 myThumbnails <- TP.createThumbnails config myPhoto
                 case myThumbnails of
                     TP.CreatedThumbnails thumbnails _ -> liftIO $ copyThumbnails thumbnails myPhotoPath (mediaFileName uploadedPhoto)
@@ -39,10 +39,12 @@ postPhotoR = do
         _ -> sendResponseStatus status400 ("Bad Request"::Text)
 
 copyThumbnails :: [Thumbnail] -> Text -> String -> IO ()
-copyThumbnails (th1:th2:th3) path fileName = do
+copyThumbnails (th1:th2:_) path fileName = do
     copyFile (TP.thumbFp th1) (unpack path </> "w1-" ++ fileName)
     copyFile (TP.thumbFp th2) (unpack path </> "w2-" ++ fileName)
-    return ()
+copyThumbnails [] path fileName = do
+    copyFile (unpack path </> fileName) (unpack path </> "w1-" ++ fileName)
+    copyFile (unpack path </> fileName) (unpack path </> "w2-" ++ fileName)
 
 fileForm :: Form (FileInfo, Maybe Text, UTCTime, Text)
 fileForm = renderBootstrap3 BootstrapBasicForm $ (,,,)
