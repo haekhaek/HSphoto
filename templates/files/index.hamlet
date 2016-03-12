@@ -18,3 +18,8 @@
 
     <button class="btn btn-default" type="submit">
         <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"> Upload
+
+<hr>
+<progress value="0" max="100" id="progressBar" class="container col-xs-12 col-md-12">
+<hr>
+<ul class="list-group" id="uploadResults">

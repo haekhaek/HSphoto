@@ -19,7 +19,7 @@ $(document).ready(function (e) {
             || fileToUpload.type == 'image/jpeg';
     }
 
-    function uploadFile(formTag, fileToUpload) {
+    function uploadFile(formTag, progressSteps, fileToUpload) {
         var url = getUploadUrl(fileToUpload),
             formData = new FormData();
 
@@ -40,11 +40,18 @@ $(document).ready(function (e) {
                 error: reject
             });
         })
-        .then(increaseProgressBar);
+        .tap(function(){
+            $("#uploadResults").prepend('<li class="list-group-item list-group-item-success">File: '+ fileToUpload.name +' uploaded <span class="glyphicon glyphicon-ok"></span></a></li>');
+        })
+        .tap(increaseProgressBar.bind(null, progressSteps));
     }
 
-    function increaseProgressBar(result){
-        //increase progress bar
+    function increaseProgressBar(progressSteps){
+        var newValue = $('#progressBar').val() + progressSteps;
+        $('#progressBar')
+        .show()
+        .val(newValue)
+        .text(newValue);
     }
 
     function getUploadUrl(fileToUpload){
