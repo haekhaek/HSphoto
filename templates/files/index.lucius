@@ -1,0 +1,9 @@
+#uploadResults{
+    max-height: 250px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+#progressBar {
+    display: none;
+}
