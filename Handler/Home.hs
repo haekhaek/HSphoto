@@ -48,7 +48,7 @@ postHomeR = do
     case result of
          FormSuccess filterOptions' -> do
                 let myFilter = map tupleToFilter . filter isFalseFilter $ createSqlFilters filterOptions'
-                allFiles <- runDB $ selectList myFilter [Asc PhotoTimeShot]
+                allFiles <- runDB $ selectList myFilter [Asc MediaFileTime]
                 defaultLayout $(widgetFile "homepage")
          _ -> defaultLayout $ do
              let allFiles = []
