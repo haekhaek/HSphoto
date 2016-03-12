@@ -26,6 +26,7 @@ library
                      Handler.Photo
                      Handler.File
                      Handler.Video
+                     Handler.FileUpdate
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT

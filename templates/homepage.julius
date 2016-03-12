@@ -1,0 +1,21 @@
+function updateLike(element, url){
+    var spanElement = $(element).find("span");
+
+    $.ajax({
+      url: url,
+      type: 'POST',
+      success: showSuccesMessage,
+      error: showErrorMessage,
+    });
+
+    function showErrorMessage(message){
+        console.log(message);
+    }
+
+    function showSuccesMessage(message){
+        if(message == 'Updated'){
+            var foo = parseInt($(spanElement).text()) + 1;
+            $(spanElement).text(' '+foo);
+        }
+    }
+}

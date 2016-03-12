@@ -10,3 +10,4 @@
 /photos/new PhotoR POST
 /videos/new VideoR POST
 /files/new FileR GET
+!/files/#MediaFileId FileUpdateR POST DELETE

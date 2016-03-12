@@ -28,7 +28,7 @@
                             $maybe timeShot <- mediaFileTimeShot file
                                 <button type="button" class="btn btn-default btn-xs" data-container="body" data-toggle="popover" data-placement="bottom" title="Info" data-content="#{cameraManufacturer}&#13;&#10;#{cameraModel}&#13;&#10;#{show timeShot}&#13;&#10;Flash fired: #{flashFired}">
                                     <span class="glyphicon glyphicon-info-sign" aria-hidden="true">
-                <button type="button" class="btn btn-default btn-xs">
+                <button type="button" class="btn btn-default btn-xs" onclick="updateLike(this,'@{FileUpdateR id}');">
                     <span class="glyphicon glyphicon-heart" aria-hidden="true"> #{mediaFileLikes file}
                 $maybe tag <- mediaFileTag file
                     <button type="button" class="btn btn-default btn-xs">
@@ -36,6 +36,8 @@
             $else
                 <video muted controls preload="none">
                     <source src="/#{mediaFileAbsolutePath file}" type=#{mediaFileContentType file}>
+                <button type="button" class="btn btn-default btn-xs" onclick="updateLike(this,'@{FileUpdateR id}');">
+                    <span class="glyphicon glyphicon-heart" aria-hidden="true"> #{mediaFileLikes file}
                 $maybe tag <- mediaFileTag file
                     <button type="button" class="btn btn-default btn-xs">
                         <span class="glyphicon glyphicon-tags" aria-hidden="true"> #{tag}
