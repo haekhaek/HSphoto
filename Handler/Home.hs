@@ -3,7 +3,6 @@ module Handler.Home where
 import Import
 import Yesod.Form.Bootstrap3
 import Yesod.Form.Jquery
-import Data.Time.LocalTime
 import Data.Time.Clock as Clock
 
 getHomeR :: Handler Html

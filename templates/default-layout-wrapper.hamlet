@@ -27,7 +27,6 @@ $newline never
       <footer>
         #{appCopyright $ appSettings master}
 
-
    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.0.3/js.cookie.min.js">
    <script>
       /* The `defaultCsrfMiddleware` Middleware added in Foundation.hs adds a CSRF token the request cookies. */

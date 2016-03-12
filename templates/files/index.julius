@@ -4,10 +4,12 @@ $(document).ready(function (e) {
 
         var formTag = $("#tag").val(),
             formFiles = $('#filesToUpload')[0].files,
-            formFilesFlat = _.filter(formFiles, filterFilesToUpload);
+            formFilesFlat = _.filter(formFiles, filterFilesToUpload),
+            progressSteps = 100 / formFiles.length ;
 
         Promise
-            .each(formFilesFlat, uploadFile.bind(null, formTag))
+            .map(formFilesFlat, uploadFile.bind(null, formTag, progressSteps), {concurrency: 1})
+            .then($('#progressBar').val(100).text(100))
             .catch(handleError);
     });
 
