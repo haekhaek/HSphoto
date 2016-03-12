@@ -19,3 +19,23 @@ function updateLike(element, url){
         }
     }
 }
+
+function deleteFile(element, url){
+    var parentElement = $(element).closest('li');
+    $.ajax({
+      url: url,
+      type: 'DELETE',
+      success: showSuccesMessage,
+      error: showErrorMessage,
+    });
+
+    function showErrorMessage(message){
+        console.log(message);
+    }
+
+    function showSuccesMessage(message){
+        if(message == 'Deleted'){
+            $(parentElement).remove();
+        }
+    }
+}

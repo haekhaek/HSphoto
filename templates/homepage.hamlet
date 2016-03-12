@@ -30,6 +30,8 @@
                                     <span class="glyphicon glyphicon-info-sign" aria-hidden="true">
                 <button type="button" class="btn btn-default btn-xs" onclick="updateLike(this,'@{FileUpdateR id}');">
                     <span class="glyphicon glyphicon-heart" aria-hidden="true"> #{mediaFileLikes file}
+                <button type="button" class="btn btn-default btn-xs" onclick="deleteFile(this,'@{FileUpdateR id}');">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true">
                 $maybe tag <- mediaFileTag file
                     <button type="button" class="btn btn-default btn-xs">
                         <span class="glyphicon glyphicon-tags" aria-hidden="true"> #{tag}
@@ -38,6 +40,8 @@
                     <source src="/#{mediaFileAbsolutePath file}" type=#{mediaFileContentType file}>
                 <button type="button" class="btn btn-default btn-xs" onclick="updateLike(this,'@{FileUpdateR id}');">
                     <span class="glyphicon glyphicon-heart" aria-hidden="true"> #{mediaFileLikes file}
+                <button type="button" class="btn btn-default btn-xs" onclick="deleteFile(this,'@{FileUpdateR id}');">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true">
                 $maybe tag <- mediaFileTag file
                     <button type="button" class="btn btn-default btn-xs">
                         <span class="glyphicon glyphicon-tags" aria-hidden="true"> #{tag}
