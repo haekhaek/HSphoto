@@ -11,3 +11,4 @@
 /videos/new VideoR POST
 /files/new FileR GET
 !/files/#MediaFileId FileUpdateR POST DELETE
+/tags TagR GET

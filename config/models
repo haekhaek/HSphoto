@@ -13,9 +13,14 @@ Comment json -- Adding "json" causes ToJSON and FromJSON instances to be derived
     userId UserId Maybe
     deriving Eq
     deriving Show
+Tag json
+    value Text
+    UniqueTag value
+    deriving Eq
+    deriving Show
 MediaFile
     name String
-    tag Text Maybe
+    tag Text
     time UTCTime default=CURRENT_TIME
     contentType Text
     folderPath Text default='/tmp'

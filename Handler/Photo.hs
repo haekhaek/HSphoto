@@ -17,6 +17,14 @@ postPhotoR = do
     ((result, _), _) <- runFormPost fileForm
     case result of
         FormSuccess myForm -> do
+            let myTagNam = mySnd myForm
+            maybeTagId <- runDB $ selectFirst [TagValue ==. (mySnd myForm)] []
+            case maybeTagId of
+                 Nothing -> do
+                     tagId <- runDB $ insert $ Tag $ mySnd myForm
+                     return ()
+                 _ -> liftIO $ print maybeTagId
+
             uploadedPhotoWithDefaults <- formToFile myForm
             uploadedPhoto <- updateExifMap uploadedPhotoWithDefaults
             let mySize = 15 * 1024 * 1024
@@ -38,6 +46,9 @@ postPhotoR = do
             sendResponseStatus status204 ("No Content"::Text)
         _ -> sendResponseStatus status400 ("Bad Request"::Text)
 
+mySnd :: (FileInfo, Text, UTCTime, Text) -> Text
+mySnd (_, tagName, _, _) = tagName
+
 copyThumbnails :: [Thumbnail] -> Text -> String -> IO ()
 copyThumbnails (th1:th2:_) path fileName = do
     copyFile (TP.thumbFp th1) (unpack path </> "w1-" ++ fileName)
@@ -46,14 +57,14 @@ copyThumbnails [] path fileName = do
     copyFile (unpack path </> fileName) (unpack path </> "w1-" ++ fileName)
     copyFile (unpack path </> fileName) (unpack path </> "w2-" ++ fileName)
 
-fileForm :: Form (FileInfo, Maybe Text, UTCTime, Text)
+fileForm :: Form (FileInfo, Text, UTCTime, Text)
 fileForm = renderBootstrap3 BootstrapBasicForm $ (,,,)
     <$> fileAFormReq "Add file"
-    <*> aopt textField (bfs ("Tag" :: Text)) Nothing
+    <*> areq textField (bfs ("Tag" :: Text)) Nothing
     <*> lift (liftIO getCurrentTime)
     <*> pure "/tmp"
 
-formToFile :: (FileInfo, Maybe Text, UTCTime, Text) -> Handler MediaFile
+formToFile :: (FileInfo, Text, UTCTime, Text) -> Handler MediaFile
 formToFile (file, tag, time, _) = do
     folderPath <- createFolder time
     fileName <- moveToUploadFolder file folderPath

@@ -27,6 +27,7 @@ library
                      Handler.File
                      Handler.Video
                      Handler.FileUpdate
+                     Handler.Tag
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT
@@ -94,6 +95,7 @@ library
                  , hsexif
                  , thumbnail-plus
                  , resourcet
+                 , esqueleto
 
 executable         HSphoto
     if flag(library-only)
