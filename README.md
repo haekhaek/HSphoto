@@ -1,6 +1,6 @@
 # HSphoto
 
-It's a tool where you can tag and upload your pictures/videos and search for the tag and meta informations of the pictures if availible.
+With HSphoto you can tag and upload your images/videos, and search for the tag and meta informations of the file.
 
 Installation:
 
