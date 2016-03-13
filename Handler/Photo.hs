@@ -9,7 +9,7 @@ import Graphics.HsExif as HsExif
 import Data.Time.LocalTime
 import Graphics.ThumbnailPlus as TP
 import qualified System.Directory as D
-import Control.Concurrent (forkIO, threadDelay)
+import Control.Concurrent (forkIO)
 import qualified Control.Monad.Trans.Resource as R
 
 postPhotoR :: Handler Html
