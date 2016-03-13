@@ -32,7 +32,7 @@ postPhotoR = do
                     TP.FileSizeTooLarge _ -> liftIO $ print ("FileSizeTooLarge"::Text)
                     TP.ImageFormatUnrecognized -> liftIO $ print ("ImageFormatUnrecognized"::Text)
 
-            photoId <- runDB $ insert uploadedPhoto
+            _ <- runDB $ insert uploadedPhoto
             sendResponseStatus status204 ("No Content"::Text)
         _ -> sendResponseStatus status400 ("Bad Request"::Text)
 
