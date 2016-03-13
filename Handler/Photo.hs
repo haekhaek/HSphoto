@@ -21,15 +21,11 @@ postPhotoR = do
 
             uploadedPhotoWithDefaults <- formToFile myForm
             uploadedPhoto <- updateExifMap uploadedPhotoWithDefaults
-            let mySize = 15 * 1024 * 1024
-                myResolution = Size 6144 6144
-                myThumbnailSizes = [(Size 600 600, Nothing), (Size 1360 1360, Nothing)]
-                config = TP.Configuration mySize myResolution SameFileFormat myThumbnailSizes D.getTemporaryDirectory
-                myPhoto = unpack $ mediaFileAbsolutePath uploadedPhoto
-                myPhotoPath = mediaFileFolderPath uploadedPhoto
 
-            _ <- ($) liftIO $ forkIO $ R.runResourceT $ do
-                myThumbnails <- TP.createThumbnails config myPhoto
+            let photoPath = mediaFileFolderPath uploadedPhoto
+
+            _ <- liftIO $ forkIO $ R.runResourceT $ do
+                myThumbnails <- TP.createThumbnails thumbnailConfig $ unpack $ mediaFileAbsolutePath uploadedPhoto
                 case myThumbnails of
                     TP.CreatedThumbnails thumbnails _ -> liftIO $ copyThumbnails thumbnails myPhotoPath (mediaFileName uploadedPhoto)
                     TP.ImageFormatUnrecognized -> print "ImageFormatUnrecognized"
@@ -52,6 +48,8 @@ saveTagName tagValue = do
             return ()
         Just _ -> return ()
 
+thumbnailConfig :: TP.Configuration
+thumbnailConfig = TP.Configuration (15 * 1024 * 1024) (Size 6144 6144) SameFileFormat [(Size 600 600, Nothing), (Size 1360 1360, Nothing)] D.getTemporaryDirectory
 
 copyThumbnails :: [Thumbnail] -> Text -> String -> IO ()
 copyThumbnails (th1:th2:_) path fileName = do
