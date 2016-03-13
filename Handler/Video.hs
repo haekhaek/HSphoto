@@ -9,6 +9,6 @@ postVideoR = do
     case result of
         FormSuccess myForm -> do
             uploadedVideo <- formToFile myForm
-            videoId <- runDB $ insert uploadedVideo
+            _ <- runDB $ insert uploadedVideo
             sendResponseStatus status204 ("No Content"::Text)
         _ -> sendResponseStatus status400 ("Bad Request"::Text)
