@@ -4,7 +4,7 @@ It's a tool where you can tag and upload your pictures/videos and search for the
 
 Installation:
 
-stack install yesod-bin cabal-install --install-ghc
-stack build
-stack exec -- yesod devel
-Visit site at http://localhost:3000/
+- `stack install yesod-bin cabal-install --install-gch`
+- `stack build`
+- `stack exec -- yesod devel`
+- visit site at http://localhost:3000/
