@@ -27,10 +27,10 @@ postPhotoR = do
             _ <- liftIO $ forkIO $ R.runResourceT $ do
                 myThumbnails <- TP.createThumbnails thumbnailConfig $ unpack $ mediaFileAbsolutePath uploadedPhoto
                 case myThumbnails of
-                    TP.CreatedThumbnails thumbnails _ -> liftIO $ copyThumbnails thumbnails myPhotoPath (mediaFileName uploadedPhoto)
-                    TP.ImageFormatUnrecognized -> print "ImageFormatUnrecognized"
-                    TP.ImageSizeTooLarge size -> print size
-                    TP.FileSizeTooLarge size -> print size
+                    TP.CreatedThumbnails thumbnails _ -> liftIO $ copyThumbnails thumbnails photoPath (mediaFileName uploadedPhoto)
+                    TP.ImageSizeTooLarge _ -> liftIO $ print ("ImageSizeTooLarge"::Text)
+                    TP.FileSizeTooLarge _ -> liftIO $ print ("FileSizeTooLarge"::Text)
+                    TP.ImageFormatUnrecognized -> liftIO $ print ("ImageFormatUnrecognized"::Text)
 
             photoId <- runDB $ insert uploadedPhoto
             sendResponseStatus status204 ("No Content"::Text)
@@ -52,12 +52,12 @@ thumbnailConfig :: TP.Configuration
 thumbnailConfig = TP.Configuration (15 * 1024 * 1024) (Size 6144 6144) SameFileFormat [(Size 600 600, Nothing), (Size 1360 1360, Nothing)] D.getTemporaryDirectory
 
 copyThumbnails :: [Thumbnail] -> Text -> String -> IO ()
-copyThumbnails (th1:th2:_) path fileName = do
-    copyFile (TP.thumbFp th1) (unpack path </> "w1-" ++ fileName)
-    copyFile (TP.thumbFp th2) (unpack path </> "w2-" ++ fileName)
-copyThumbnails [] path fileName = do
-    copyFile (unpack path </> fileName) (unpack path </> "w1-" ++ fileName)
-    copyFile (unpack path </> fileName) (unpack path </> "w2-" ++ fileName)
+copyThumbnails (th1:th2:_) path originalFileName = do
+    copyFile (TP.thumbFp th1) (unpack path </> "w1-" ++ originalFileName)
+    copyFile (TP.thumbFp th2) (unpack path </> "w2-" ++ originalFileName)
+copyThumbnails _ path originalFileName = do
+    copyFile (unpack path </> originalFileName) (unpack path </> "w1-" ++ originalFileName)
+    copyFile (unpack path </> originalFileName) (unpack path </> "w2-" ++ originalFileName)
 
 fileForm :: Form (FileInfo, Text, UTCTime, Text)
 fileForm = renderBootstrap3 BootstrapBasicForm $ (,,,)
