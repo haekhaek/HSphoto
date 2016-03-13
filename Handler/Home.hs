@@ -32,8 +32,8 @@ filterForm myFilterOptions = FilterOptions
     <*> aopt datePickerField fromDateSettings Nothing
     <*> aopt datePickerField toDateSettings Nothing
     <*  bootstrapSubmit ("search" :: BootstrapSubmit Text)
-    where fromDateSettings = (bfs ("from date photo created"::Text))
-          toDateSettings = withSmallInput $ (bfs ("to date photo created"::Text))
+    where fromDateSettings = (bfs ("date start"::Text))
+          toDateSettings = withSmallInput $ (bfs ("date end"::Text))
           tagSettings = withPlaceholder "type in the tag you search for" $ tagSettings'
           tagSettings' = FieldSettings (SomeMessage ("tag"::Text)) Nothing (Just "tagId") Nothing []
           flashFiredSettings = (FieldSettings (SomeMessage ("flash fired"::Text)) Nothing (Just "flashFired") Nothing [])
