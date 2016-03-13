@@ -49,7 +49,7 @@ saveTagName tagValue = do
         Just _ -> return ()
 
 thumbnailConfig :: TP.Configuration
-thumbnailConfig = TP.Configuration (15 * 1024 * 1024) (Size 6144 6144) SameFileFormat [(Size 600 600, Nothing), (Size 1360 1360, Nothing)] D.getTemporaryDirectory
+thumbnailConfig = TP.Configuration (5 * 1024 * 1024) (Size 6144 6144) SameFileFormat [(Size 600 600, Nothing), (Size 1360 1360, Nothing)] D.getTemporaryDirectory
 
 copyThumbnails :: [Thumbnail] -> Text -> String -> IO ()
 copyThumbnails (th1:th2:_) path originalFileName = do

@@ -92,7 +92,7 @@ instance Yesod App where
     isAuthorized _ _ = return Authorized
 
     -- Set Max upload size fo photos to
-    maximumContentLength _ (Just PhotoR) = Just $ 15 * 1024 * 1024
+    maximumContentLength _ (Just PhotoR) = Just $ 5 * 1024 * 1024
     maximumContentLength _ (Just VideoR) = Just $ 1024 * 1024 * 1024
     maximumContentLength _ _ = Just $ 2 * 1024 * 1024
 
