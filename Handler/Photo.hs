@@ -17,6 +17,14 @@ postPhotoR = do
     ((result, _), _) <- runFormPost fileForm
     case result of
         FormSuccess myForm -> do
+            let myTagNam = mySnd myForm
+            maybeTagId <- runDB $ selectFirst [TagValue ==. (mySnd myForm)] []
+            case maybeTagId of
+                 Nothing -> do
+                     tagId <- runDB $ insert $ Tag $ mySnd myForm
+                     return ()
+                 _ -> liftIO $ print maybeTagId
+
             uploadedPhotoWithDefaults <- formToFile myForm
             uploadedPhoto <- updateExifMap uploadedPhotoWithDefaults
             let mySize = 15 * 1024 * 1024
@@ -37,6 +45,9 @@ postPhotoR = do
             photoId <- runDB $ insert uploadedPhoto
             sendResponseStatus status204 ("No Content"::Text)
         _ -> sendResponseStatus status400 ("Bad Request"::Text)
+
+mySnd :: (FileInfo, Text, UTCTime, Text) -> Text
+mySnd (_, tagName, _, _) = tagName
 
 copyThumbnails :: [Thumbnail] -> Text -> String -> IO ()
 copyThumbnails (th1:th2:_) path fileName = do
