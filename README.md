@@ -4,7 +4,7 @@ With HSphoto you can tag and upload your images/videos, and search for the tag a
 
 Installation:
 
-- `stack install yesod-bin cabal-install --install-gch`
+- `stack install yesod-bin cabal-install --install-ghc`
 - `stack build`
 - `stack exec -- yesod devel`
 - visit site at http://localhost:3000/
