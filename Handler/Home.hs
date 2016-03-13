@@ -68,11 +68,11 @@ tupleToFilter :: (Bool, a) -> a
 tupleToFilter (_, a) = a
 
 isFalseFilter :: (Bool, a) -> Bool
-isFalseFilter (True, a) = True
-isFalseFilter (False, a) = False
+isFalseFilter (True, _) = True
+isFalseFilter (False, _) = False
 
 checkIsBool :: Maybe a -> Bool
-checkIsBool (Just a) = True
+checkIsBool (Just _) = True
 checkIsBool Nothing = False
 
 createSqlFilters :: FilterOptions -> [(Bool, Filter MediaFile)]
