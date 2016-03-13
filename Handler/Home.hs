@@ -7,7 +7,7 @@ import Data.Time.Clock as Clock
 
 getHomeR :: Handler Html
 getHomeR = do
-    (widget, enctype) <- generateFormPost $ renderBootstrap3 BootstrapBasicForm (filterForm Nothing)
+    (widget, enctype) <- generateFormPost $ renderBootstrap3 BootstrapBasicForm filterForm
     let allFiles = []
     defaultLayout $ do
         setTitle "Welcome To Yesod!"
@@ -23,8 +23,8 @@ data FilterOptions = FilterOptions
     }
   deriving Show
 
-filterForm :: Maybe FilterOptions -> AForm Handler FilterOptions
-filterForm myFilterOptions = FilterOptions
+filterForm :: AForm Handler FilterOptions
+filterForm = FilterOptions
     <$> areq (jqueryAutocompleteField TagR) tagSettings Nothing
     <*> aopt textField (bfs ("camera make"::Text)) Nothing
     <*> aopt textField (bfs ("camera model"::Text)) Nothing
@@ -44,7 +44,7 @@ filterForm myFilterOptions = FilterOptions
 
 postHomeR :: Handler Html
 postHomeR = do
-    ((result, widget), enctype) <- runFormPost $ renderBootstrap3 BootstrapBasicForm (filterForm Nothing)
+    ((result, widget), enctype) <- runFormPost $ renderBootstrap3 BootstrapBasicForm filterForm
     case result of
          FormSuccess filterOptions' -> do
                 let myFilter = map tupleToFilter . filter isFalseFilter $ createSqlFilters filterOptions'
