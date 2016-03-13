@@ -8,3 +8,6 @@ Installation:
 - `stack build`
 - `stack exec -- yesod devel`
 - visit site at http://localhost:3000/
+
+External dependenyc
+- GD Graphics Library
