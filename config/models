@@ -31,7 +31,7 @@ MediaFile
     cameraManufacturer Text Maybe
     flashFired Bool Maybe
     timeShot UTCTime Maybe
-    likes Int
+    likes Int default 0
     deriving Eq
     deriving Show
 -- By default this file is used in Model.hs (which is imported by Foundation.hs)
