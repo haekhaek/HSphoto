@@ -57,14 +57,14 @@ copyThumbnails [] path fileName = do
     copyFile (unpack path </> fileName) (unpack path </> "w1-" ++ fileName)
     copyFile (unpack path </> fileName) (unpack path </> "w2-" ++ fileName)
 
-fileForm :: Form (FileInfo, Maybe Text, UTCTime, Text)
+fileForm :: Form (FileInfo, Text, UTCTime, Text)
 fileForm = renderBootstrap3 BootstrapBasicForm $ (,,,)
     <$> fileAFormReq "Add file"
-    <*> aopt textField (bfs ("Tag" :: Text)) Nothing
+    <*> areq textField (bfs ("Tag" :: Text)) Nothing
     <*> lift (liftIO getCurrentTime)
     <*> pure "/tmp"
 
-formToFile :: (FileInfo, Maybe Text, UTCTime, Text) -> Handler MediaFile
+formToFile :: (FileInfo, Text, UTCTime, Text) -> Handler MediaFile
 formToFile (file, tag, time, _) = do
     folderPath <- createFolder time
     fileName <- moveToUploadFolder file folderPath

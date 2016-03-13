@@ -14,7 +14,7 @@ getHomeR = do
         $(widgetFile "homepage")
 
 data FilterOptions = FilterOptions
-    { filterOptionsTag :: Maybe Text
+    { filterOptionsTag :: Text
     , cameraManufacturer :: Maybe Text
     , cameraModel :: Maybe Text
     , flashFired :: Maybe Bool
@@ -25,7 +25,7 @@ data FilterOptions = FilterOptions
 
 filterForm :: Maybe FilterOptions -> AForm Handler FilterOptions
 filterForm myFilterOptions = FilterOptions
-    <$> aopt (jqueryAutocompleteField HomeR) tagSettings Nothing
+    <$> areq (jqueryAutocompleteField TagR) tagSettings Nothing
     <*> aopt textField (bfs ("camera make"::Text)) Nothing
     <*> aopt textField (bfs ("camera model"::Text)) Nothing
     <*> aopt boolField flashFiredSettings Nothing
@@ -77,7 +77,7 @@ checkIsBool Nothing = False
 
 createSqlFilters :: FilterOptions -> [(Bool, Filter MediaFile)]
 createSqlFilters filterOptions =
-    [(isJust $ filterOptionsTag filterOptions, Filter
+    [(True, Filter
         { filterField=MediaFileTag
         , filterValue=Right [filterOptionsTag filterOptions]
         , filterFilter=Eq
