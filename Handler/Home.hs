@@ -111,4 +111,6 @@ createSqlFilters filterOptions =
 
 isImageFile :: Text -> Bool
 isImageFile "image/jpeg" = True
+isImageFile "image/gif" = True
+isImageFile "image/png" = True
 isImageFile _ = False

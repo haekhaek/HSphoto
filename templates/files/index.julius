@@ -16,7 +16,9 @@ $(document).ready(function (e) {
     function filterFilesToUpload(fileToUpload) {
         return fileToUpload.type == 'video/mp4'
             || fileToUpload.type == 'video/quicktime'
-            || fileToUpload.type == 'image/jpeg';
+            || fileToUpload.type == 'image/jpeg'
+            || fileToUpload.type == 'image/gif'
+            || fileToUpload.type == 'image/png';
     }
 
     function uploadFile(formTag, progressSteps, fileToUpload) {

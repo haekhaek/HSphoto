@@ -11,7 +11,7 @@
 <form enctype="multipart/form-data" id="upload">
     <div class="form-group required ">
         <label>Select Files
-        <input type="file" name="filesToUpload" id="filesToUpload" multiple="true" accept="image/jpeg,video/mp4,video/qt,ideo/mov" required >
+        <input type="file" name="filesToUpload" id="filesToUpload" multiple="true" accept="image/jpeg,image/gif,image/png,video/mp4,video/qt,ideo/mov" required >
     <div class="form-group required ">
         <label>Tag
         <input type="text" name="tag" id="tag" class="form-control" required >
