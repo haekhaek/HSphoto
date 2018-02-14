@@ -18,3 +18,4 @@ cabal.sandbox.config
 *.keter
 *~
 static/media
+*.sublime-workspace
